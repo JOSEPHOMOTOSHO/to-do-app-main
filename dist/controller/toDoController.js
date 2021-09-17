@@ -24,26 +24,13 @@ async function addToDo(req, res) {
     }
 }
 exports.addToDo = addToDo;
-async function getAllToDos(req, res) {
-    try {
-        let allItems = await todoModel_1.default.find({});
-        // if (allItems.length > 0) {
-        return allItems;
-        // res.status(200).json({
-        //   status: "okay",
-        //   allItems,
-        // });
-        // } else {
-        //   res.status(400).json({
-        //     error: "No todos for now",
-        //   });
-        // }
-    }
-    catch (err) {
-        res.status(400).json({
-            error: err,
-        });
-    }
+async function getAllToDos() {
+    let allItems = await todoModel_1.default.find({});
+    return allItems;
+    //   res.status(200).json({
+    //     status: "okay",
+    //     allItems,
+    //   });
 }
 exports.getAllToDos = getAllToDos;
 async function getSingleToDo(req, res) {
@@ -74,9 +61,10 @@ async function updateToDo(req, res) {
         if (singleItem) {
             singleItem.todo = req.body.todo;
             await singleItem.save();
-            res.status(200).json({
-                singleItem,
-            });
+            res.status(200).redirect("/");
+            // json({
+            //   singleItem,
+            // });
         }
         else {
             res.status(400).json({

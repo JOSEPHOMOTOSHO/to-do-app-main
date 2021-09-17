@@ -11,6 +11,7 @@ h1 {
 }
 
 .box {
+
   max-width: 400px;
   margin: 50px auto;
   background: white;
@@ -29,6 +30,14 @@ h1 {
   align-items: center;
   border-bottom: 1px solid #F1F1F1;
 }
+.pen{
+  margin :20px;
+  padding: 0px !important;
+  width: 313px;
+}
+/* .text{
+  overflow-wrap: break-word;
+} */
 
 .item:last-child {
   border-bottom: 0;

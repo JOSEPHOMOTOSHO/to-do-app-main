@@ -19,25 +19,13 @@ async function addToDo(req: Request, res: Response) {
   }
 }
 
-async function getAllToDos(req: Request, res: Response) {
-  try {
-    let allItems = await todos.find({});
-    // if (allItems.length > 0) {
-    return allItems;
-    // res.status(200).json({
-    //   status: "okay",
-    //   allItems,
-    // });
-    // } else {
-    //   res.status(400).json({
-    //     error: "No todos for now",
-    //   });
-    // }
-  } catch (err) {
-    res.status(400).json({
-      error: err,
-    });
-  }
+async function getAllToDos() {
+  let allItems = await todos.find({});
+  return allItems;
+  //   res.status(200).json({
+  //     status: "okay",
+  //     allItems,
+  //   });
 }
 
 async function getSingleToDo(req: Request, res: Response) {
@@ -65,9 +53,10 @@ async function updateToDo(req: Request, res: Response) {
     if (singleItem) {
       singleItem.todo = req.body.todo;
       await singleItem.save();
-      res.status(200).json({
-        singleItem,
-      });
+      res.status(200).redirect("/");
+      // json({
+      //   singleItem,
+      // });
     } else {
       res.status(400).json({
         error: "toDo not found",
