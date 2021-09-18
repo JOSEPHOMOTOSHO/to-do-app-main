@@ -1,48 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>"Omotosho On the EJS BEAT"</title>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+  </head>
+  <body>
+    <!-- heading -->
+    <div class="box" id="heading">
+      <h1><%= day %></h1>
+    </div>
 
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <title>"Omotosho On the EJS BEAT"</title>
-      <link rel='stylesheet' href='stylesheets/style.css' />
-    </head>
-    <body>
-      <!-- heading -->
-      <div class="box" id="heading">
-        <h1><%= day %></h1>
-      </div>
-      
-      <!-- list items -->
-      <div class="box" id="body">
-          <% for(let i = listitems.length - 1; i >= 0; i-- ){ %>
-            <form action="/todos/<%= listitems[i]._id %>" method= "POST">
-            <div class="item">
-              <input type="checkbox" onchange="this.form.submit()">
-             <p class="text" style="white-space: nowrap;"> <%= listitems[i].todo%> </p> 
-              <span class="pen" id = "<%= [listitems[i].todo, listitems[i]._id] %>" onclick = "edit(this.id)" style="cursor:pointer" > &#128394;</span>
-            </div>
-            </form>
-         <% } %>
-  
-         <form class="item" id="frm" action="/todos" method="POST">
-          <input type="text" id="inp" name="todo" placeholder="add new item">
-          <button id="sub" type="submit">+</button>
-        </form>
-      </div>
-  
-  
-  
-       <script>
-         function edit(key){
-            document.getElementById('inp').setAttribute('value', key.split(',')[0])
-            document.getElementById('sub').innerHTML = '&#128394;'
-            console.log(key);
-            document.getElementById('frm').setAttribute('action', `/edittodos/${key.split(',')[1]}`)
+    <!-- list items -->
+    <div class="box" id="body">
+      <% for(let i = listitems.length - 1; i >= 0; i-- ){ %>
+      <form action="/todos/<%= listitems[i]._id %>" method="POST">
+        <div class="item">
+          <input type="checkbox" onchange="this.form.submit()" />
+          <p class="text" class="singleItem"><%= listitems[i].todo%></p>
+          <span
+            class="pen"
+            id="<%= [listitems[i].todo, listitems[i]._id] %>"
+            onclick="edit(this.id)"
+            style="cursor: pointer"
+          >
+            &#128394;</span
+          >
+        </div>
+      </form>
+      <% } %>
 
-         }
-       </script>
-      
-    </body>
+      <form class="itemResult" id="frm" action="/todos" method="POST">
+        <input type="text" id="inp" name="todo" placeholder="add new item" />
+        <button id="sub" onclick="addTodo()" type="button">+</button>
+      </form>
+    </div>
 
-  </html> 
-  
-  
+    <script>
+      function addTodo() {
+        let inputText = document.getElementById("inp").value;
+        if (inputText == "") {
+          alert("Please Add Item");
+          return;
+        }
+        let data = { todo: inputText };
+        let get = fetch("/todos", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => {
+            return response.json();
+          })
+        location.reload();
+      }
+      function edit(key) {
+        document.getElementById("inp").value = key.split(",")[0]
+        // .setAttribute("value", key.split(",")[0]);
+
+
+        document.getElementById("sub").innerHTML = "&#128394;";
+        document.getElementById("sub").setAttribute('type',"submit") 
+        document.getElementById("sub").removeAttribute('onclick')
+        document.getElementById("frm").setAttribute("action", `/edittodos/${key.split(",")[1]}`);
+      }
+    </script>
+  </body>
+</html>

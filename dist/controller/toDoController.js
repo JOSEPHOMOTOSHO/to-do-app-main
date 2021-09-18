@@ -8,19 +8,20 @@ const todoModel_1 = __importDefault(require("../models/todoModel"));
 async function addToDo(req, res) {
     try {
         let { todo } = req.body;
-        console.log(todo);
+        // console.log(todo);
         let newTodo = new todoModel_1.default({ todo });
-        await newTodo.save();
-        res.status(200).redirect("/");
-        // json({
-        //   status: "okay",
-        //   newTodo,
-        // });
+        console.log(newTodo);
+        res.status(200).json('OK');
+        let check = await newTodo.save();
+        if (check) {
+            res.status(200).redirect("/");
+        }
+        else {
+            res.status(400).send('gh');
+        }
     }
     catch (err) {
-        res.status(400).json({
-            error: err,
-        });
+        res.status(420).send('kl');
     }
 }
 exports.addToDo = addToDo;
@@ -84,7 +85,7 @@ async function removeToDo(req, res) {
         let singleItem = await todoModel_1.default.findById({ _id: req.params.id });
         if (singleItem) {
             await singleItem.remove();
-            console.log("mad");
+            // console.log("mad");
             res.status(200).redirect("/");
             // json({
             //   singleItem,

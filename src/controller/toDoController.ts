@@ -4,18 +4,22 @@ import { Request, Response, NextFunction } from "express";
 async function addToDo(req: Request, res: Response) {
   try {
     let { todo } = req.body;
-    console.log(todo);
+    // console.log(todo);
     let newTodo = new todos({ todo });
-    await newTodo.save();
+    console.log(newTodo);
+    
+      res.status(200).json('OK')
+    
+   let check = await newTodo.save();
+   if(check){
     res.status(200).redirect("/");
-    // json({
-    //   status: "okay",
-    //   newTodo,
-    // });
-  } catch (err) {
-    res.status(400).json({
-      error: err,
-    });
+   }else{
+    res.status(400).send('gh')
+   }
+    
+
+  } catch(err) {
+    res.status(420).send('kl')
   }
 }
 
@@ -73,7 +77,7 @@ async function removeToDo(req: Request, res: Response) {
     let singleItem = await todos.findById({ _id: req.params.id });
     if (singleItem) {
       await singleItem.remove();
-      console.log("mad");
+      // console.log("mad");
       res.status(200).redirect("/");
       // json({
       //   singleItem,
